@@ -1,5 +1,5 @@
+import { useTheme } from "@/features/ThemeProvider";
 import { Text as RNText, TextProps } from "react-native";
-import { useTheme } from "@/theme/ThemeProvider";
 
 type AppTextProps = TextProps & {
   children: React.ReactNode;

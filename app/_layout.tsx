@@ -1,21 +1,28 @@
-import { Stack } from "expo-router";
-import "../global.css";
-import { AppThemeProvider, useTheme } from "@/theme/ThemeProvider";
-import { ThemeProvider as NavigationThemeProvider } from "@react-navigation/native";
-import { SessionProvider, useSession } from "@/features/ctx";
 import { SplashScreenController } from "@/components/Splash";
+import { SessionProvider, useSession } from "@/features/ctx";
+import { AppThemeProvider, useTheme } from "@/features/ThemeProvider";
+import { ThemeProvider as NavigationThemeProvider } from "@react-navigation/native";
+import { Stack } from "expo-router";
 import { setBackgroundColorAsync } from "expo-system-ui";
-import { Platform } from "react-native";
 import React from "react";
+import { Platform } from "react-native";
+import "../global.css";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 function AppContent() {
   const { navTheme, theme } = useTheme();
-  const { session } = useSession();
+  const { session, isLoading } = useSession();
   React.useEffect(() => {
     if (Platform.OS === "android") {
       setBackgroundColorAsync(theme === "dark" ? "#000000" : "#ffffff");
     }
   }, [theme]);
+
+  if (isLoading) {
+    return <SplashScreenController />;
+  }
 
   return (
     <NavigationThemeProvider value={navTheme}>
@@ -38,11 +45,13 @@ function AppContent() {
 
 export default function RootLayout() {
   return (
-    <AppThemeProvider>
-      <SessionProvider>
-        <SplashScreenController />
-        <AppContent />
-      </SessionProvider>
-    </AppThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <AppThemeProvider>
+        <SessionProvider>
+          <SplashScreenController />
+          <AppContent />
+        </SessionProvider>
+      </AppThemeProvider>
+    </QueryClientProvider>
   );
 }

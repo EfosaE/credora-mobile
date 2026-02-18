@@ -1,8 +1,8 @@
+import { useTheme } from "@/features/ThemeProvider";
 import { cn } from "@/lib/cn";
 import React from "react";
-import { View, ScrollView, ViewProps } from "react-native";
+import { ScrollView, View, ViewProps } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useTheme } from "@/theme/ThemeProvider";
 
 type AppScreenProps = ViewProps & {
   children: React.ReactNode;

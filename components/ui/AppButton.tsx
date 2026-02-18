@@ -1,22 +1,42 @@
-import { Pressable, Text } from "react-native";
-import { useTheme } from "@/theme/ThemeProvider";
+import {
+  Pressable,
+  Text,
+  PressableProps,
+  ActivityIndicator,
+} from "react-native";
+import { useTheme } from "@/features/ThemeProvider";
+
+type AppButtonProps = PressableProps & {
+  title: string;
+  loading?: boolean;
+};
 
 export function AppButton({
   title,
+  loading = false,
+  disabled,
   onPress,
-}: {
-  title: string;
-  onPress?: () => void;
-}) {
+  className,
+  ...pressableProps
+}: AppButtonProps) {
   const { theme } = useTheme();
 
   const bgClass = theme === "dark" ? "bg-primaryDark" : "bg-primary";
 
+  const disabledClass =
+    disabled || loading ? "opacity-50" : "active:opacity-80";
+
   return (
     <Pressable
+      {...pressableProps}
       onPress={onPress}
-      className={`${bgClass} active:opacity-80 rounded-2xl py-4 px-6 items-center`}>
-      <Text className="text-white font-semibold text-base">{title}</Text>
+      disabled={disabled || loading}
+      className={`${bgClass} ${disabledClass} rounded-2xl py-4 px-6 items-center ${className ?? ""}`}>
+      {loading ? (
+        <ActivityIndicator color="white" />
+      ) : (
+        <Text className="text-white font-semibold text-base">{title}</Text>
+      )}
     </Pressable>
   );
 }

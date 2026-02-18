@@ -1,6 +1,6 @@
+import { useTheme } from "@/features/ThemeProvider";
 import React from "react";
 import { TextInput, TextInputProps } from "react-native";
-import { useTheme } from "@/theme/ThemeProvider";
 
 type AppInputProps = TextInputProps & {
   placeholder?: string;
@@ -9,8 +9,7 @@ type AppInputProps = TextInputProps & {
 export function AppInput({ placeholder, style, ...props }: AppInputProps) {
   const { theme } = useTheme();
 
-  const bgClass =
-    theme === "dark" ? "bg-surface-dark" : "bg-surface-light";
+  const bgClass = theme === "dark" ? "bg-surface-dark" : "bg-surface-light";
   const textClass =
     theme === "dark" ? "text-foreground-dark" : "text-foreground-light";
   const borderClass =

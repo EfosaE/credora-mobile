@@ -1,5 +1,5 @@
 import { AppButton } from "@/components/ui/AppButton";
-import { useTheme } from "@/theme/ThemeProvider";
+import { useTheme } from "@/features/ThemeProvider";
 
 export function ThemeToggleButton() {
   const { toggleTheme, theme } = useTheme();
