@@ -32,7 +32,7 @@ export class ApiRequestError<T = unknown> extends Error {
 }
 
 export function unwrapApiResponse<T>(body: ApiResponse<T>): ApiResponse<T> {
-  console.log("API response:", body);
+  // console.log("API response:", body);
   if (isApiSuccess(body)) {
     return body;
   }

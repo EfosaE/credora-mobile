@@ -1,19 +1,22 @@
 import { api } from "@/http-client/axios";
 import { ApiRequestError, unwrapApiResponse } from "@/http-client/error";
 import { ApiResponse } from "@/http-client/types/api";
-import { LoginResponse } from "@/http-client/types/auth.type";
+
 import { isAxiosError } from "axios";
 
-export const authClient = {
-  async login(input: {
-    accountNumber: string;
-    password: string;
-  }): Promise<ApiResponse<LoginResponse>> {
+type UserBalanceResponse = {
+  user: {
+    id: string;
+    name: string;
+    balance: string;
+  };
+};
+
+export const userClient = {
+  async getUserBalance(): Promise<ApiResponse<UserBalanceResponse>> {
     try {
-      const res = await api.post<ApiResponse<LoginResponse>>(
-        "/auth/login",
-        input,
-      );
+      const res =
+        await api.get<ApiResponse<UserBalanceResponse>>("/user/balance");
       // console.log("Login response:", res);
       return unwrapApiResponse(res.data);
     } catch (error: any) {
@@ -29,12 +32,13 @@ export const authClient = {
       throw error;
     }
   },
-  async logout(): Promise<ApiResponse<LoginResponse>> {
+  async getUserTransactionHistory(
+    limit?: string,
+    cursor?: string,
+  ): Promise<ApiResponse<UserBalanceResponse>> {
     try {
-      const res = await api.post<ApiResponse<LoginResponse>>(
-        "/auth/logout",
-        {},
-      );
+      const res =
+        await api.get<ApiResponse<UserBalanceResponse>>("/user/transactions");
       // console.log("Login response:", res);
       return unwrapApiResponse(res.data);
     } catch (error: any) {
@@ -51,5 +55,3 @@ export const authClient = {
     }
   },
 };
-
-

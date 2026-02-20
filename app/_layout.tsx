@@ -8,18 +8,21 @@ import React from "react";
 import { Platform } from "react-native";
 import "../global.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { setLogoutHandler } from "@/features/authBridge";
 
-const queryClient = new QueryClient();
+export const queryClient = new QueryClient();
 
 function AppContent() {
   const { navTheme, theme } = useTheme();
-  const { session, isLoading } = useSession();
+  const { session, isLoading, signOut } = useSession();
   React.useEffect(() => {
     if (Platform.OS === "android") {
       setBackgroundColorAsync(theme === "dark" ? "#000000" : "#ffffff");
     }
   }, [theme]);
-
+  React.useEffect(() => {
+    setLogoutHandler(signOut);
+  }, [signOut]);
   if (isLoading) {
     return <SplashScreenController />;
   }

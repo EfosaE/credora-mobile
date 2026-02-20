@@ -1,4 +1,4 @@
-import { Pressable, View } from "react-native";
+import { ActivityIndicator, Pressable, View } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { AppScreen } from "@/components/ui/AppScreen";
 import { AppText } from "@/components/ui/AppText";
@@ -7,6 +7,8 @@ import { useSession } from "@/features/ctx";
 import { Link } from "expo-router";
 
 import type { Href } from "expo-router";
+import { userClient } from "@/http-client/user/client";
+import { useQuery } from "@tanstack/react-query";
 
 type QuickAction = {
   label: string;
@@ -18,6 +20,16 @@ export default function Index() {
   const { theme } = useTheme();
   const { user } = useSession();
   const isDark = theme === "dark";
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["user-balance"],
+    queryFn: async () => {
+      const res = await userClient.getUserBalance();
+      return res?.data;
+    },
+  });
+
+  const balance = data?.user?.balance;
 
   const quickActions: QuickAction[] = [
     { label: "Account\nand Card", icon: "card-outline" },
@@ -52,9 +64,17 @@ export default function Index() {
         </View>
 
         <View className="flex-row items-center justify-between">
-          <AppText className="text-white text-2xl font-bold">
-            {user?.currency} {user?.balance || "Balance Not Available"}
-          </AppText>
+          {isLoading ? (
+            <ActivityIndicator size="small" color="#ffffff" />
+          ) : error ? (
+            <AppText className="text-red-300 text-base font-medium">
+              Failed to load
+            </AppText>
+          ) : (
+            <AppText className="text-white text-2xl font-bold">
+              {user?.currency} {balance ?? "0.00"}
+            </AppText>
+          )}
 
           <AppText className="text-white font-bold">VISA</AppText>
         </View>
