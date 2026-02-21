@@ -3,7 +3,6 @@ import { InternalTransferForm } from "@/components/transfer/InternalTransferForm
 import { TransferTabs } from "@/components/transfer/TransferTabs";
 import { AppButton } from "@/components/ui/AppButton";
 import { AppScreen } from "@/components/ui/AppScreen";
-import { AppText } from "@/components/ui/AppText";
 import { useSession } from "@/features/ctx";
 import { useTransferForm } from "@/features/hooks/useTransfer";
 import { transferClient } from "@/http-client/transfer/client";

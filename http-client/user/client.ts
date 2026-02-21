@@ -1,6 +1,7 @@
 import { api } from "@/http-client/axios";
 import { ApiRequestError, unwrapApiResponse } from "@/http-client/error";
 import { ApiResponse } from "@/http-client/types/api";
+import { Transaction } from "@/http-client/types/transaction.type";
 
 import { isAxiosError } from "axios";
 
@@ -10,6 +11,10 @@ type UserBalanceResponse = {
     name: string;
     balance: string;
   };
+};
+export type TransactionHistoryResponse = {
+  nextCursor: string | null;
+  transactions: Transaction[];
 };
 
 export const userClient = {
@@ -33,13 +38,20 @@ export const userClient = {
     }
   },
   async getUserTransactionHistory(
+    cursor: string | null,
     limit?: string,
-    cursor?: string,
-  ): Promise<ApiResponse<UserBalanceResponse>> {
+  ): Promise<ApiResponse<TransactionHistoryResponse>> {
     try {
-      const res =
-        await api.get<ApiResponse<UserBalanceResponse>>("/user/transactions");
-      // console.log("Login response:", res);
+      const res = await api.get<ApiResponse<TransactionHistoryResponse>>(
+        "/user/transactions",
+        {
+          params: {
+            ...(limit ? { limit } : {}),
+            ...(cursor ? { cursor } : {}),
+          },
+        },
+      );
+      console.log("Transaction History", res.data);
       return unwrapApiResponse(res.data);
     } catch (error: any) {
       if (isAxiosError<ApiResponse<null>>(error)) {

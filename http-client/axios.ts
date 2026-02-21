@@ -33,6 +33,7 @@ api.interceptors.request.use(async (config) => {
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
+    console.log("Response Interceptor Error:", error);
     if (error.response?.status === 401) {
       console.log("detected 401 response, logging out...");
       queryClient.clear();
@@ -47,7 +48,7 @@ api.interceptors.response.use(
       // await SecureStore.setItemAsync("session", res.data.accessToken);
 
       // error.config.headers.Authorization = `Bearer ${res.data.accessToken}`;
-      // return api.request(error.config);
+      return api.request(error.config);
     }
 
     return Promise.reject(error);

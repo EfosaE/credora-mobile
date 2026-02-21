@@ -8,6 +8,7 @@ export default function Layout() {
         options={{ title: "Home", headerShown: false }}
       />
       <Stack.Screen name="transfer" options={{ title: "Transfer" }} />
+      <Stack.Screen name="transactions-history" options={{ title: "Transactions History" }} />
     </Stack>
   );
 }

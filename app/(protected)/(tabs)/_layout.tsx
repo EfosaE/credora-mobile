@@ -7,6 +7,8 @@ export default function TabLayout() {
   const pathName = usePathname();
   // console.log("Current Path:", pathName);
 
+  const paths = ["/transfer", "/transactions-history"];
+
   const isDark = theme === "dark";
 
   return (
@@ -29,7 +31,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="(home)"
         options={{
-          headerShown: pathName === "/transfer" ? false : true,
+          headerShown: paths.includes(pathName) ? false : true,
           headerTitle: "CREDORA",
           title: "Home",
           tabBarIcon: ({ color, focused }) => (

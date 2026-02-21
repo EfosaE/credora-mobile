@@ -9,6 +9,7 @@ import { Link } from "expo-router";
 import type { Href } from "expo-router";
 import { userClient } from "@/http-client/user/client";
 import { useQuery } from "@tanstack/react-query";
+import { AppButton } from "@/components/ui/AppButton";
 
 type QuickAction = {
   label: string;
@@ -39,7 +40,11 @@ export default function Index() {
     { label: "Pay the\nbill", icon: "receipt-outline" },
     { label: "Save\nonline", icon: "wallet-outline" },
     { label: "Credit\ncard", icon: "card" },
-    { label: "Transaction\nreport", icon: "document-text-outline" },
+    {
+      label: "Transaction\nhistory",
+      icon: "document-text-outline",
+      url: "/transactions-history",
+    },
     { label: "Beneficiary", icon: "people-outline" },
   ];
 
@@ -137,6 +142,12 @@ export default function Index() {
           })}
         </View>
       </View>
+      <AppButton
+        title={"Infite Query"}
+        onPress={() => {
+          userClient.getUserTransactionHistory(null);
+        }}
+      />
     </AppScreen>
   );
 }

@@ -1,13 +1,7 @@
 import React, { useState } from "react";
-import {
-  View,
-  ScrollView,
-  TouchableOpacity,
-  useColorScheme,
-} from "react-native";
+import { View, ScrollView } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import * as Sharing from "expo-sharing";
-import { Ionicons } from "@expo/vector-icons";
 
 import { AppScreen } from "@/components/ui/AppScreen";
 import { AppText } from "@/components/ui/AppText";
@@ -17,9 +11,6 @@ import { generateReceiptPdf } from "@/lib/generateReceipt";
 import { ReceiptCard } from "@/components/CustomReceiptCard";
 
 export default function ReceiptPreviewScreen() {
-  const colorScheme = useColorScheme();
-  const isDark = colorScheme === "dark";
-
   const { amount, transferId, date, recipientName, uri } =
     useLocalSearchParams<{
       amount: string;
@@ -69,27 +60,6 @@ export default function ReceiptPreviewScreen() {
 
   return (
     <AppScreen>
-      {/* ── Nav bar ── */}
-      <View className="flex-row items-center px-4 py-3 border-b border-gray-100 dark:border-gray-800">
-        <TouchableOpacity
-          onPress={() => router.back()}
-          className="w-9 items-start justify-center"
-          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
-          <Ionicons
-            name="chevron-back"
-            size={24}
-            color={isDark ? "#F9FAFB" : "#111827"}
-          />
-        </TouchableOpacity>
-
-        <AppText className="flex-1 text-center text-base font-semibold text-gray-900 dark:text-gray-50">
-          Receipt
-        </AppText>
-
-        {/* Spacer keeps title centred */}
-        <View className="w-9" />
-      </View>
-
       {/* ── Scrollable receipt card ── */}
       <ScrollView
         className="flex-1"
