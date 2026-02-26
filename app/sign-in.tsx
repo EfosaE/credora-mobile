@@ -134,6 +134,11 @@ export default function SignIn() {
 
           {/* Footer */}
           <TouchableOpacity
+            onPress={() => router.push("/notification")}
+            className="mt-6 items-center">
+            <AppText className="mt-1 font-bold">Open Notification Manager</AppText>
+          </TouchableOpacity>
+          <TouchableOpacity
             onPress={() => router.push("/sign-up")}
             className="mt-6 items-center">
             <AppText className="opacity-70">

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "281557946315",
+    "project_id": "credora-ca36d",
+    "storage_bucket": "credora-ca36d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:281557946315:android:6b97769170d6694b00304e",
+        "android_client_info": {
+          "package_name": "com.efosae_o.credoramobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAC9ZhRsDyt3fRl19amdmwOuMUhAt3qu-8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

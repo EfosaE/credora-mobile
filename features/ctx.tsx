@@ -1,4 +1,4 @@
-import { useStorageState } from "@/features/hooks/storage.hook";
+import { useStorageState } from "@/features/hooks/useSecureStore";
 import { UserAccount } from "@/http-client/types/user.type";
 import { use, createContext, type PropsWithChildren } from "react";
 

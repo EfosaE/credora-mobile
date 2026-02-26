@@ -1,50 +1,157 @@
-# Welcome to your Expo app 👋
+# Credora Mobile App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Credora is a mobile banking simulator that allows users to send and receive money in a controlled environment. The app simulates core digital banking flows including authentication, internal transfers, transaction history, and push notifications.
 
-## Get started
+It is powered by a [Go backend](https://github.com/EfosaE/credora-backend) and integrates with Monnify for external transfer simulation.
 
-1. Install dependencies
+---
 
-   ```bash
-   npm install
-   ```
+## Overview
 
-2. Start the app
+Credora replicates the experience of a modern banking application. Users can create and manage accounts, authenticate securely, transfer funds internally, view transaction history, and receive real-time push notifications.
 
-   ```bash
-   npx expo start
-   ```
+The application is built using Expo (React Native) and communicates with a backend API.
 
-In the output, you'll find options to open the app in a
+---
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Features
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+**Authentication**
 
-## Get a fresh project
+- Email or account number login
+- Password authentication
+- OTP verification flow
+- Secure session handling
 
-When you're ready, run:
+**Transfers**
 
-```bash
-npm run reset-project
+- Internal transfers between Credora accounts
+- Real-time balance updates
+- Transaction status feedback
+
+**Transaction History**
+
+- Detailed transaction list
+- Status indicators
+- Timestamped records
+
+**Notifications**
+
+- Push notifications using Firebase Cloud Messaging (FCM)
+- Transfer confirmations
+- Account activity alerts
+
+---
+
+## Tech Stack
+
+- Expo
+- React Native
+- TypeScript
+- Expo Router (file-based routing)
+- Firebase Cloud Messaging (FCM)
+
+---
+
+## Project Structure
+
+```
+app/
+├── (auth)/
+├── (tabs)/
+components/
+hooks/
+services/
+constants/
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+- `app/` – Route-based screens
+- `components/` – Reusable UI components
+- `services/` – API communication layer
+- `hooks/` – Custom React hooks
 
-## Learn more
+---
 
-To learn more about developing your project with Expo, look at the following resources:
+## Getting Started
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+### 1. Install Dependencies
 
-## Join the community
+```bash
+npm install
+```
 
-Join our community of developers creating universal apps.
+### 2. Start the Development Server
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+```bash
+npx expo start
+```
+
+You can run the app on an Android emulator, iOS simulator, or a physical device using Expo Go.
+
+---
+
+## Environment Configuration
+
+Create a `.env` file in the root directory:
+
+```env
+EXPO_PUBLIC_API_BASE_URL=http://localhost:8080
+EXPO_PUBLIC_FCM_PROJECT_ID=your_project_id
+```
+
+> Restart the dev server after modifying environment variables.
+
+---
+
+## Screenshots
+
+## Application Flow
+
+### Authentication
+
+| Login Step 1                         | Login Step 2                          |
+| ------------------------------------ | ------------------------------------- |
+| ![](docs/images/login-screen-1.jpeg) | ![](docs/images/login-screen-22.jpeg) |
+
+---
+
+### Dashboard
+
+| Light Mode                            | Dark Mode                            |
+| ------------------------------------- | ------------------------------------ |
+| ![](docs/images/dashboard-light.jpeg) | ![](docs/images/dashboard-dark.jpeg) |
+
+---
+
+### Internal Transfer Flow
+
+| Transfer Details                      | Confirm Transfer                      |
+| ------------------------------------- | ------------------------------------- |
+| ![](docs/images/transfer-step-1.jpeg) | ![](docs/images/transfer-step-2.jpeg) |
+
+| Processing                       | Result                              |
+| -------------------------------- | ----------------------------------- |
+| ![](docs/images/processing.jpeg) | ![](docs/images/result-screen.jpeg) |
+
+---
+
+### Receipt & Notifications
+
+| Receipt Preview                      | Notifications                           |
+| ------------------------------------ | --------------------------------------- |
+| ![](docs/images/receipt-screen.jpeg) | ![](docs/images/notifications-tab.jpeg) |
+
+---
+
+## Security Notes
+
+OTP verification is required for all sensitive operations.
+
+---
+
+## Future Improvements
+
+- Notifications wired to actual app events
+- Biometric authentication
+- External transfer UI enhancements
+- Improved analytics dashboard

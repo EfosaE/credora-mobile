@@ -21,7 +21,7 @@ export const userClient = {
   async getUserBalance(): Promise<ApiResponse<UserBalanceResponse>> {
     try {
       const res =
-        await api.get<ApiResponse<UserBalanceResponse>>("/user/balance");
+        await api.get<ApiResponse<UserBalanceResponse>>("/users/balance");
       // console.log("Login response:", res);
       return unwrapApiResponse(res.data);
     } catch (error: any) {
@@ -43,7 +43,7 @@ export const userClient = {
   ): Promise<ApiResponse<TransactionHistoryResponse>> {
     try {
       const res = await api.get<ApiResponse<TransactionHistoryResponse>>(
-        "/user/transactions",
+        "/users/transactions",
         {
           params: {
             ...(limit ? { limit } : {}),
@@ -52,6 +52,28 @@ export const userClient = {
         },
       );
       console.log("Transaction History", res.data);
+      return unwrapApiResponse(res.data);
+    } catch (error: any) {
+      if (isAxiosError<ApiResponse<null>>(error)) {
+        console.log("Status:", error.response?.status);
+        console.log("Response body:", error.response?.data);
+
+        if (error.response?.data) {
+          throw new ApiRequestError(error.response.data);
+        }
+      }
+
+      throw error;
+    }
+  },
+  async registerDeviceToken(token: string, platform: string): Promise<any> {
+    // The userId is taken from the auth context in the backend
+    try {
+      const res = await api.post("/users/register-token", {
+        token,
+        platform,
+      });
+
       return unwrapApiResponse(res.data);
     } catch (error: any) {
       if (isAxiosError<ApiResponse<null>>(error)) {

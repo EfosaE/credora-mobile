@@ -18,7 +18,8 @@
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "package": "com.efosae_o.credoramobile"
+      "package": "com.efosae_o.credoramobile",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "bundler": "metro",
@@ -43,7 +44,8 @@
             "backgroundColor": "#000000"
           }
         }
-      ]
+      ],
+      "expo-notifications"
     ],
     "extra": {
       "router": {},
