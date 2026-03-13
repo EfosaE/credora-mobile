@@ -9,7 +9,7 @@ import { Link } from "expo-router";
 import type { Href } from "expo-router";
 import { userClient } from "@/http-client/user/client";
 import { useQuery } from "@tanstack/react-query";
-import { AppButton } from "@/components/ui/AppButton";
+
 
 type QuickAction = {
   label: string;
@@ -142,12 +142,6 @@ export default function Index() {
           })}
         </View>
       </View>
-      <AppButton
-        title={"Infite Query"}
-        onPress={() => {
-          userClient.getUserTransactionHistory(null);
-        }}
-      />
     </AppScreen>
   );
 }
