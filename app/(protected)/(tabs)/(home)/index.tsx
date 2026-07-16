@@ -1,5 +1,7 @@
 import { ActivityIndicator, Pressable, View } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import * as Clipboard from "expo-clipboard";
+import { useState } from "react";
 import { AppScreen } from "@/components/ui/AppScreen";
 import { AppText } from "@/components/ui/AppText";
 import { useTheme } from "@/features/ThemeProvider";
@@ -9,7 +11,6 @@ import { Link } from "expo-router";
 import type { Href } from "expo-router";
 import { userClient } from "@/http-client/user/client";
 import { useQuery } from "@tanstack/react-query";
-
 
 type QuickAction = {
   label: string;
@@ -21,6 +22,7 @@ export default function Index() {
   const { theme } = useTheme();
   const { user } = useSession();
   const isDark = theme === "dark";
+  const [copiedId, setCopiedId] = useState<string | null>(null);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["user-balance"],
@@ -30,7 +32,13 @@ export default function Index() {
     },
   });
 
-  const balance = data?.user?.balance;
+  const accounts = data?.accounts ?? [];
+
+  const handleCopy = async (accountNumber: string, id: string) => {
+    await Clipboard.setStringAsync(accountNumber);
+    setCopiedId(id);
+    setTimeout(() => setCopiedId(null), 1500);
+  };
 
   const quickActions: QuickAction[] = [
     { label: "Account\nand Card", icon: "card-outline" },
@@ -50,39 +58,59 @@ export default function Index() {
 
   return (
     <AppScreen padded={false} className="justify">
-      {/* CARD */}
+      {/* ACCOUNTS SUMMARY */}
       <View className="mx-5 mt-10 rounded-3xl overflow-hidden bg-primary p-6">
-        <View className="mb-6">
+        <View className="mb-4">
           <AppText className="text-white text-lg font-semibold">
             {user?.fullName || "User Name Not Found"}
           </AppText>
+        </View>
 
-          <AppText className="text-white text-xs opacity-80 mt-1">
-            Amazon Platinium
+        {isLoading ? (
+          <ActivityIndicator size="small" color="#ffffff" />
+        ) : error ? (
+          <AppText className="text-red-300 text-base font-medium">
+            Failed to load
           </AppText>
-        </View>
+        ) : (
+          accounts.map((acct, idx) => (
+            <View key={acct.id}>
+              <View className="flex-row items-center justify-between py-3">
+                <View>
+                  <AppText className="text-white text-xs opacity-70 mb-1">
+                    {acct.bankName}
+                  </AppText>
 
-        <View className="mb-4">
-          <AppText className="text-white tracking-widest">
-            4756 •••• •••• 9018
-          </AppText>
-        </View>
+                  <Pressable
+                    onPress={() => handleCopy(acct.accountNumber, acct.id)}
+                    className="flex-row items-center"
+                    hitSlop={8}>
+                    <AppText className="text-white tracking-widest text-sm mr-2">
+                      {acct.accountNumber}
+                    </AppText>
+                    <Ionicons
+                      name={
+                        copiedId === acct.id
+                          ? "checkmark-outline"
+                          : "copy-outline"
+                      }
+                      size={14}
+                      color="#ffffff"
+                    />
+                  </Pressable>
+                </View>
 
-        <View className="flex-row items-center justify-between">
-          {isLoading ? (
-            <ActivityIndicator size="small" color="#ffffff" />
-          ) : error ? (
-            <AppText className="text-red-300 text-base font-medium">
-              Failed to load
-            </AppText>
-          ) : (
-            <AppText className="text-white text-2xl font-bold">
-              {user?.currency} {balance ?? "0.00"}
-            </AppText>
-          )}
+                <AppText className="text-white text-xl font-bold">
+                  {acct?.currency} {acct.balance}
+                </AppText>
+              </View>
 
-          <AppText className="text-white font-bold">VISA</AppText>
-        </View>
+              {idx < accounts.length - 1 && (
+                <View className="h-[1px] bg-white/20 my-1" />
+              )}
+            </View>
+          ))
+        )}
       </View>
 
       {/* QUICK ACTION GRID */}
@@ -124,7 +152,6 @@ export default function Index() {
               </>
             );
 
-            // Clickable tile
             if (item.url) {
               return (
                 <Link key={index} href={item.url} asChild>
@@ -133,7 +160,6 @@ export default function Index() {
               );
             }
 
-            // Static tile
             return (
               <View key={index} className={TileClasses}>
                 {Inner}

@@ -3,17 +3,23 @@ import { ApiRequestError, unwrapApiResponse } from "@/http-client/error";
 import { ApiResponse } from "@/http-client/types/api";
 import { isAxiosError } from "axios";
 
-type RecipientInfo = {
-  name: string;
-  id: string;
-  email: string;
-};
+// type RecipientInfo =
 
 type GetRecipientNameResponse = {
-  user: RecipientInfo;
+  accounts: null | any[];
+  balance: string;
+  createdAt: string; // ISO 8601 Date String
+  email: string;
+  fullName: string;
+  id: string; // UUID v4 format
+  isVerified: boolean;
+  nin: string;
+  phoneNumber: string;
+  updatedAt: string; // ISO 8601 Date String
 };
 
 type MakeInternalTransferPayload = {
+  fromAccount: string;
   toAccount: string;
   amount: string;
   currency: string;
@@ -27,15 +33,13 @@ type MakeInternalTransferResponse = {
 };
 
 type GetTransferStatusResponse = {
-  status: {
-    idemKey: string;
-    status: string;
-    operationType: string;
-    payload: {
-      to: string;
-      from: string;
-      amount: string;
-    };
+  idemKey: string;
+  status: string;
+  operationType: string;
+  payload: {
+    to: string;
+    from: string;
+    amount: string;
   };
 };
 

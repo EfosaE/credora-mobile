@@ -33,7 +33,8 @@ export default function TransferResultModal() {
     queryKey: ["transfer-status", transferId],
     queryFn: async () => {
       const res = await transferClient.getTransferStatus(transferId);
-      return res?.data?.status.status;
+      console.log("Transfer status response:", res);
+      return res?.data?.status;
     },
     refetchInterval: (query) => {
       const status = query.state.data;

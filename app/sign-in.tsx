@@ -11,6 +11,7 @@ import { AppText } from "@/components/ui/AppText";
 import { AppScreen } from "@/components/ui/AppScreen";
 import { useSession } from "@/features/ctx";
 import { authClient } from "@/http-client/auth/client";
+import { ApiRequestError } from "@/http-client/error";
 
 export default function SignIn() {
   const { signIn } = useSession();
@@ -23,16 +24,27 @@ export default function SignIn() {
   const { mutate: login, isPending } = useMutation({
     mutationFn: () =>
       authClient.login({
-        accountNumber,
+        identifier: accountNumber,
         password,
       }),
     onSuccess: (res) => {
       signIn(res.data!.accessToken, res.data!.user);
       router.replace("/");
     },
-    onError: (e) => {
-      console.error("Login error:", e);
-      setErrorMessage("Invalid account number or password");
+    onError: (error) => {
+      console.error("Login error:", error);
+
+      if (error instanceof ApiRequestError) {
+        setErrorMessage(error.response.message);
+        return;
+      }
+
+      if (error instanceof Error) {
+        setErrorMessage(error.message);
+        return;
+      }
+
+      setErrorMessage("Something went wrong.");
     },
   });
 

@@ -1,3 +1,5 @@
+import { AccountPickerModal } from "@/components/transfer/AccountPickerModal";
+import { DebitAccountSelector } from "@/components/transfer/DebitAccountSelector";
 import { ExternalTransferForm } from "@/components/transfer/ExternalTransferForm";
 import { InternalTransferForm } from "@/components/transfer/InternalTransferForm";
 import { TransferTabs } from "@/components/transfer/TransferTabs";
@@ -6,12 +8,16 @@ import { AppScreen } from "@/components/ui/AppScreen";
 import { useSession } from "@/features/ctx";
 import { useTransferForm } from "@/features/hooks/useTransfer";
 import { transferClient } from "@/http-client/transfer/client";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import * as Crypto from "expo-crypto";
 import { router } from "expo-router";
+import { useState } from "react";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 export default function Transfer() {
   const { user } = useSession();
+  const [selectedAccount, setSelectedAccount] = useState(user!.accounts[0]);
+
+  const [showAccountPicker, setShowAccountPicker] = useState(false);
 
   const {
     transferType,
@@ -30,8 +36,9 @@ export default function Transfer() {
     setRecipientName,
     recipientName,
   } = useTransferForm({
-    balance: Number(user!.balance),
-    userAccountNumber: user!.accountNumber,
+    
+    balance: Number(selectedAccount.balance),
+    userAccountNumber: selectedAccount.accountNumber,
   });
 
   type HandleSubmitPayload =
@@ -61,9 +68,10 @@ export default function Transfer() {
 
     const res = await transferClient.makeInternalTransfer(
       {
+        fromAccount: selectedAccount.accountNumber,
         toAccount: payload.accountNumber,
         amount: payload.amount.toString(),
-        currency: "NGN",
+        currency: selectedAccount.currency,
         description:
           payload.description.trim() === ""
             ? `Internal Transfer to ${payload.accountNumber}`
@@ -97,6 +105,12 @@ export default function Transfer() {
         }}>
         <TransferTabs value={transferType} onChange={switchType} />
 
+        <DebitAccountSelector
+          accounts={user!.accounts}
+          selectedAccount={selectedAccount}
+          onPress={() => setShowAccountPicker(true)}
+        />
+
         {transferType === "external" ? (
           <ExternalTransferForm
             bank={bank}
@@ -125,6 +139,13 @@ export default function Transfer() {
           disabled={isDisabled || loading}
           loading={loading}
           onPress={() => submit(handleSubmit)}
+        />
+        <AccountPickerModal
+          visible={showAccountPicker}
+          accounts={user!.accounts}
+          selectedAccount={selectedAccount}
+          onClose={() => setShowAccountPicker(false)}
+          onSelect={setSelectedAccount}
         />
       </KeyboardAwareScrollView>
     </AppScreen>

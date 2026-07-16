@@ -35,13 +35,13 @@ export function InternalTransferForm({
     staleTime: 1000 * 60 * 5, // cache for 5 minutes
   });
 
-  // console.log("Query Data", data);
+  console.log("Query Data", data);
 
-  const recipientName = data?.data?.user.name ?? null;
+  const recipientName = data?.data?.fullName ?? null;
 
   useEffect(() => {
     setRecipientName(recipientName || "");
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recipientName]);
 
   return (

@@ -2,15 +2,12 @@ import { api } from "@/http-client/axios";
 import { ApiRequestError, unwrapApiResponse } from "@/http-client/error";
 import { ApiResponse } from "@/http-client/types/api";
 import { Transaction } from "@/http-client/types/transaction.type";
+import { Account } from "@/http-client/types/user.type";
 
 import { isAxiosError } from "axios";
 
 type UserBalanceResponse = {
-  user: {
-    id: string;
-    name: string;
-    balance: string;
-  };
+  accounts: Account[];
 };
 export type TransactionHistoryResponse = {
   nextCursor: string | null;

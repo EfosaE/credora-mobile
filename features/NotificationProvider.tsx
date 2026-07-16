@@ -4,7 +4,8 @@ import { ReactNode } from "react";
 
 export function NotificationProvider({ children }: { children: ReactNode }) {
   const { user } = useSession();
-  useNotifications(user?.userId ?? null);
+  console.log("NotificationProvider user:", user?.id);
+  useNotifications(user?.id ?? null);
 
   return <>{children}</>;
 }

@@ -4,13 +4,15 @@ import axios from "axios";
 
 import * as SecureStore from "expo-secure-store";
 
-const LOCAL_IP = "10.147.26.91";
+const LOCAL_IP = "10.160.53.91";
+// const LOCAL_IP = "100.69.23.156";10.233.45.91
+
 
 export const API_BASE_URL = __DEV__
   ? `http://${LOCAL_IP}:8080/api/v1`
   : "https://api.credora.com/api/v1";
 
-// console.log("API Base URL:", API_BASE_URL);
+console.log("API Base URL:", API_BASE_URL);
 
 export const api = axios.create({
   baseURL: API_BASE_URL,
@@ -18,6 +20,7 @@ export const api = axios.create({
     "Content-Type": "application/json",
   },
 });
+
 
 api.interceptors.request.use(async (config) => {
   const token = await SecureStore.getItemAsync("session");
@@ -48,7 +51,7 @@ api.interceptors.response.use(
       // await SecureStore.setItemAsync("session", res.data.accessToken);
 
       // error.config.headers.Authorization = `Bearer ${res.data.accessToken}`;
-      return api.request(error.config);
+      // return api.request(error.config);
     }
 
     return Promise.reject(error);

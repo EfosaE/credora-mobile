@@ -47,13 +47,13 @@ export function useTransferForm({
       return false;
     }
 
-    if (numericAmount > balance) {
-      Alert.alert("Insufficient balance");
+    if (transferType === "internal" && accountNumber === userAccountNumber) {
+      Alert.alert("You cannot transfer to the same account.");
       return false;
     }
 
-    if (transferType === "internal" && accountNumber === userAccountNumber) {
-      Alert.alert("You cannot transfer to your own account.");
+    if (numericAmount > balance) {
+      Alert.alert("Insufficient balance");
       return false;
     }
 

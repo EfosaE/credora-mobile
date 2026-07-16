@@ -6,7 +6,7 @@ import { isAxiosError } from "axios";
 
 export const authClient = {
   async login(input: {
-    accountNumber: string;
+    identifier: string;
     password: string;
   }): Promise<ApiResponse<LoginResponse>> {
     try {
@@ -14,16 +14,19 @@ export const authClient = {
         "/auth/login",
         input,
       );
-      // console.log("Login response:", res);
-      return unwrapApiResponse(res.data);
-    } catch (error: any) {
-      if (isAxiosError<ApiResponse<null>>(error)) {
-        console.log("Status:", error.response?.status);
-        console.log("Response body:", error.response?.data);
 
-        if (error.response?.data) {
-          throw new ApiRequestError(error.response.data);
+      return unwrapApiResponse(res.data);
+    } catch (error) {
+      if (isAxiosError<ApiResponse<null>>(error)) {
+        // Network error (server down, internet issue, DNS failure, timeout)
+        if (!error.response) {
+          throw new Error(
+            "Unable to reach the server. Please check your connection and try again.",
+          );
         }
+
+        // API returned an error response
+        throw new ApiRequestError(error.response.data);
       }
 
       throw error;
@@ -51,5 +54,3 @@ export const authClient = {
     }
   },
 };
-
-
